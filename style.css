@@ -1,0 +1,26 @@
+
+body {
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#board {
+    width: 750px;
+    height: 750px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: rgb(202, 202, 202);
+
+    display: flex; 
+    flex-wrap: wrap; 
+
+}
+
+.cell {
+    width: 15px;
+    height: 15px;
+    background-color: cyan;
+
+}
