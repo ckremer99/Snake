@@ -18,9 +18,15 @@ body {
 
 }
 
-.cell {
-    width: 15px;
-    height: 15px;
-    background-color: cyan;
+.cell-blue {
+    width: 25px;
+    height: 25px;
+    background-color: rgb(37, 100, 226);
 
+}
+
+.cell-dark-blue {
+    width: 25px;
+    height: 25px;
+    background-color: rgb(2, 32, 113);
 }
