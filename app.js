@@ -2,7 +2,7 @@ const snakeColor = "orange";
 const wallColor = "hotpink";
 const foodColor = "cyan";
 
-const timeInterval = 150;
+const timeInterval = 100;
 
 const boardElement = document.querySelector("#board");
 
@@ -70,10 +70,10 @@ function updateSnake() {
         boardState[snake[i].y + 30 * snake[i].x].isSnake = true;
     }
 
-    if (boardState[newSegment.y + 30 * newSegment.x].isWall) {
+    if (boardState[snake[0].y + 30 * snake[0].x].isWall) {
         reset()
         paused = true;
-    } else if (boardState[newSegment.y + 30 * newSegment.x].isSnake) {
+    } else if (boardState[snake[0].y + 30 * snake[0].x].isSnake) {
         paused = true;
         reset()
     }
