@@ -1,5 +1,6 @@
 const snakeColor = "orange";
-wallColor = "hotpink";
+const wallColor = "hotpink";
+const foodColor = "cyan";
 
 const timeInterval = 150;
 
@@ -14,18 +15,7 @@ let currentDirection = "right";
 let gameOver = false;
 let paused = true;
 
-snake.push({ x: 15, y: 15, direction: "right" });
-snake.push({ x: 14, y: 15, direction: "right" });
-snake.push({ x: 13, y: 15, direction: "right" });
-snake.push({ x: 12, y: 15, direction: "right" });
-snake.push({ x: 11, y: 15, direction: "right" });
-snake.push({ x: 10, y: 15, direction: "right" });
-snake.push({ x: 9, y: 15, direction: "right" });
-snake.push({ x: 8, y: 15, direction: "right" });
-snake.push({ x: 7, y: 15, direction: "right" });
-snake.push({ x: 6, y: 15, direction: "right" });
-snake.push({ x: 5, y: 15, direction: "right" });
-snake.push({ x: 4, y: 15, direction: "right" });
+
 
 window.setInterval(() => {
     if (paused === false || gameOver === true) {
@@ -63,7 +53,14 @@ function updateSnake() {
     }
 
     snake.unshift(newSegment);
-    snake.pop();
+
+    if (!boardState[newSegment.y + 30 * newSegment.x].isFood) {
+        snake.pop();
+    } else {
+        boardState[newSegment.y + 30 * newSegment.x].isFood = false; 
+        generateFood();
+    }
+    
 
     for (let i = 0; i < 900; i++) {
         boardState[i].isSnake = false;
@@ -94,15 +91,6 @@ function reset() {
     snake.push({ x: 15, y: 15, direction: "right" });
     snake.push({ x: 14, y: 15, direction: "right" });
     snake.push({ x: 13, y: 15, direction: "right" });
-    snake.push({ x: 12, y: 15, direction: "right" });
-    snake.push({ x: 11, y: 15, direction: "right" });
-    snake.push({ x: 10, y: 15, direction: "right" });
-    snake.push({ x: 9, y: 15, direction: "right" });
-    snake.push({ x: 8, y: 15, direction: "right" });
-    snake.push({ x: 7, y: 15, direction: "right" });
-    snake.push({ x: 6, y: 15, direction: "right" });
-    snake.push({ x: 5, y: 15, direction: "right" });
-    snake.push({ x: 4, y: 15, direction: "right" });
 }
 
 function initElements() {
@@ -135,6 +123,22 @@ function initElements() {
         boardState[30 * i].isWall = true;
         boardState[30 * i + 29].isWall = true;
     }
+
+    generateFood();
+}
+
+function generateFood() {
+    let possibleLocation;
+    while (true) {
+        possibleLocation = Math.floor(Math.random() * 900);
+        if (boardState[possibleLocation].isSnake || boardState[possibleLocation].isWall) {
+            continue
+        } else {
+            boardState[possibleLocation].isFood = true; 
+            break;
+        }
+    }
+
 }
 
 function drawBoard() {
@@ -162,11 +166,14 @@ function drawBoard() {
                 cellElements[i + 30 * j].style.backgroundColor = wallColor;
             }
 
-            boardElement.appendChild(cellElements[i + 30 * j]);
+            if (boardState[i + 30 * j].isFood) {
+                cellElements[i + 30 * j].style.backgroundColor = foodColor;
+            }
         }
     }
 }
 
 initElements();
+reset();
 drawBoard();
 drawSnake();
