@@ -1,7 +1,7 @@
-const snakeColor = "orange";
-const wallColor = "hotpink";
-const foodColor = "cyan";
-const backColor = "blue";
+const snakeColor = "#42ff83";
+const wallColor = "#35495e";
+const foodColor = "#ff7e67";
+const backColor = "#306969";
 
 
 const timeInterval = 100;
