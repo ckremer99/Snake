@@ -91,6 +91,10 @@ function reset() {
     snake.push({ x: 15, y: 15, direction: "right" });
     snake.push({ x: 14, y: 15, direction: "right" });
     snake.push({ x: 13, y: 15, direction: "right" });
+
+    for (let i = 0; i < 900; i++) {
+        boardState[i].isSnake = false;
+    }
 }
 
 function initElements() {
