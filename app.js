@@ -1,6 +1,7 @@
 const snakeColor = "orange";
 const wallColor = "hotpink";
 const foodColor = "cyan";
+const backColor = "blue";
 
 const timeInterval = 100;
 
@@ -14,8 +15,6 @@ let currentDirection = "right";
 
 let gameOver = false;
 let paused = true;
-
-
 
 window.setInterval(() => {
     if (paused === false || gameOver === true) {
@@ -57,10 +56,9 @@ function updateSnake() {
     if (!boardState[newSegment.y + 30 * newSegment.x].isFood) {
         snake.pop();
     } else {
-        boardState[newSegment.y + 30 * newSegment.x].isFood = false; 
+        boardState[newSegment.y + 30 * newSegment.x].isFood = false;
         generateFood();
     }
-    
 
     for (let i = 0; i < 900; i++) {
         boardState[i].isSnake = false;
@@ -71,18 +69,17 @@ function updateSnake() {
     }
 
     if (boardState[snake[0].y + 30 * snake[0].x].isWall) {
-        reset()
+        reset();
         paused = true;
     } else if (boardState[snake[0].y + 30 * snake[0].x].isSnake) {
         paused = true;
-        reset()
+        reset();
     }
 }
 
 function drawSnake() {
     snake.forEach((segment) => {
-        cellElements[segment.y + 30 * segment.x].style.backgroundColor =
-            snakeColor;
+        cellElements[segment.y + 30 * segment.x].style.backgroundColor = snakeColor;
     });
 }
 
@@ -98,27 +95,9 @@ function reset() {
 }
 
 function initElements() {
-    for (let i = 0; i < 30; i++) {
-        for (let j = 0; j < 30; j++) {
-            boardState.push({ isSnake: false, isFood: false, isWall: false });
-            cellElements[i + 30 * j] = document.createElement("div");
-
-            if (i % 2 === 0) {
-                if (j % 2 === 0) {
-                    cellElements[i + 30 * j].classList.add("cell-blue");
-                } else {
-                    cellElements[i + 30 * j].classList.add("cell-dark-blue");
-                }
-            } else {
-                if (j % 2 === 0) {
-                    cellElements[i + 30 * j].classList.add("cell-dark-blue");
-                } else {
-                    cellElements[i + 30 * j].classList.add("cell-blue");
-                }
-            }
-
-            boardElement.appendChild(cellElements[i + 30 * j]);
-        }
+    for (let i = 0; i < 900; i++) {
+        cellElements[i].style.backgroundColor = backColor;
+        boardElement.appendChild(cellElements[i]);
     }
 
     for (let i = 0; i < 30; i++) {
@@ -135,44 +114,29 @@ function generateFood() {
     let possibleLocation;
     while (true) {
         possibleLocation = Math.floor(Math.random() * 900);
-        if (boardState[possibleLocation].isSnake || boardState[possibleLocation].isWall) {
-            continue
+        if (
+            boardState[possibleLocation].isSnake ||
+            boardState[possibleLocation].isWall
+        ) {
+            continue;
         } else {
-            boardState[possibleLocation].isFood = true; 
+            boardState[possibleLocation].isFood = true;
             break;
         }
     }
-
 }
 
 function drawBoard() {
-    for (let i = 0; i < 30; i++) {
-        for (let j = 0; j < 30; j++) {
-            if (i % 2 === 0) {
-                if (j % 2 === 0) {
-                    cellElements[i + 30 * j].style.backgroundColor =
-                        "rgb(37, 100, 226)";
-                } else {
-                    cellElements[i + 30 * j].style.backgroundColor =
-                        "rgb(2, 32, 113)";
-                }
-            } else {
-                if (j % 2 === 0) {
-                    cellElements[i + 30 * j].style.backgroundColor =
-                        "rgb(2, 32, 113)";
-                } else {
-                    cellElements[i + 30 * j].style.backgroundColor =
-                        "rgb(37, 100, 226)";
-                }
-            }
+    for (let i = 0; i < 900; i++) {
 
-            if (boardState[i + 30 * j].isWall) {
-                cellElements[i + 30 * j].style.backgroundColor = wallColor;
-            }
+        cellElements[i].style.backgroundColor = backColor;
 
-            if (boardState[i + 30 * j].isFood) {
-                cellElements[i + 30 * j].style.backgroundColor = foodColor;
-            }
+        if (boardState[i].isWall) {
+            cellElements[i].style.backgroundColor = wallColor;
+        }
+
+        if (boardState[i].isFood) {
+            cellElements[i].style.backgroundColor = foodColor;
         }
     }
 }

@@ -4,6 +4,13 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: gray;
+}
+
+h1 {
+    color: white;
+    font-size: 50px;
+    margin-bottom: 10px;
 }
 
 #board {
@@ -11,6 +18,7 @@ body {
     height: 750px;
     margin-top: 50px;
     margin-bottom: 50px;
+    margin-top: 10px;
     background-color: rgb(202, 202, 202);
 
     display: flex; 
