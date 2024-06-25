@@ -1,5 +1,7 @@
 const snakeColor = "orange";
-const timeInterval = 250;
+wallColor = "hotpink";
+
+const timeInterval = 150;
 
 const boardElement = document.querySelector("#board");
 
@@ -10,6 +12,7 @@ let snake = [];
 let currentDirection = "right";
 
 let gameOver = false;
+let paused = true;
 
 snake.push({ x: 15, y: 15, direction: "right" });
 snake.push({ x: 14, y: 15, direction: "right" });
@@ -17,41 +20,66 @@ snake.push({ x: 13, y: 15, direction: "right" });
 snake.push({ x: 12, y: 15, direction: "right" });
 snake.push({ x: 11, y: 15, direction: "right" });
 snake.push({ x: 10, y: 15, direction: "right" });
+snake.push({ x: 9, y: 15, direction: "right" });
+snake.push({ x: 8, y: 15, direction: "right" });
+snake.push({ x: 7, y: 15, direction: "right" });
+snake.push({ x: 6, y: 15, direction: "right" });
+snake.push({ x: 5, y: 15, direction: "right" });
+snake.push({ x: 4, y: 15, direction: "right" });
 
-// window.setInterval(() => {
-//     updateSnake();
-//     drawBoard();
-//     drawSnake();
-// } , timeInterval)
+window.setInterval(() => {
+    if (paused === false || gameOver === true) {
+        updateSnake();
+        drawBoard();
+        drawSnake();
+    }
+}, timeInterval);
 
 document.addEventListener("keydown", (event) => {
-    if (event.code === "ArrowRight") {
+    if (event.code === "ArrowRight" && currentDirection !== "left") {
         currentDirection = "right";
-    } else if (event.code === "ArrowLeft") {
+    } else if (event.code === "ArrowLeft" && currentDirection !== "right") {
         currentDirection = "left";
-    } else if (event.code === "ArrowUp") {
+    } else if (event.code === "ArrowUp" && currentDirection !== "down") {
         currentDirection = "up";
-    } else if (event.code === "ArrowDown") {
+    } else if (event.code === "ArrowDown" && currentDirection !== "up") {
         currentDirection = "down";
+    } else if (event.code === "Space") {
+        paused = !paused;
     }
 });
 
 function updateSnake() {
-    newSegment = {x: snake[0].x, y: snake[0].y ,direction: currentDirection,}
+    newSegment = { x: snake[0].x, y: snake[0].y, direction: currentDirection };
 
     if (snake[0].direction === "right") {
-        newSegment.x += 1; 
+        newSegment.x += 1;
     } else if (snake[0].direction === "left") {
-        newSegment.x -= 1; 
+        newSegment.x -= 1;
     } else if (snake[0].direction === "up") {
         newSegment.y -= 1;
     } else if (snake[0].direction === "down") {
         newSegment.y += 1;
     }
 
-    snake.unshift(newSegment)
-    snake.pop()
-    
+    snake.unshift(newSegment);
+    snake.pop();
+
+    for (let i = 0; i < 900; i++) {
+        boardState[i].isSnake = false;
+    }
+
+    for (let i = 1; i < snake.length; i++) {
+        boardState[snake[i].y + 30 * snake[i].x].isSnake = true;
+    }
+
+    if (boardState[newSegment.y + 30 * newSegment.x].isWall) {
+        reset()
+        paused = true;
+    } else if (boardState[newSegment.y + 30 * newSegment.x].isSnake) {
+        paused = true;
+        reset()
+    }
 }
 
 function drawSnake() {
@@ -59,6 +87,22 @@ function drawSnake() {
         cellElements[segment.y + 30 * segment.x].style.backgroundColor =
             snakeColor;
     });
+}
+
+function reset() {
+    snake = [];
+    snake.push({ x: 15, y: 15, direction: "right" });
+    snake.push({ x: 14, y: 15, direction: "right" });
+    snake.push({ x: 13, y: 15, direction: "right" });
+    snake.push({ x: 12, y: 15, direction: "right" });
+    snake.push({ x: 11, y: 15, direction: "right" });
+    snake.push({ x: 10, y: 15, direction: "right" });
+    snake.push({ x: 9, y: 15, direction: "right" });
+    snake.push({ x: 8, y: 15, direction: "right" });
+    snake.push({ x: 7, y: 15, direction: "right" });
+    snake.push({ x: 6, y: 15, direction: "right" });
+    snake.push({ x: 5, y: 15, direction: "right" });
+    snake.push({ x: 4, y: 15, direction: "right" });
 }
 
 function initElements() {
@@ -84,6 +128,13 @@ function initElements() {
             boardElement.appendChild(cellElements[i + 30 * j]);
         }
     }
+
+    for (let i = 0; i < 30; i++) {
+        boardState[870 + i].isWall = true;
+        boardState[i].isWall = true;
+        boardState[30 * i].isWall = true;
+        boardState[30 * i + 29].isWall = true;
+    }
 }
 
 function drawBoard() {
@@ -107,10 +158,15 @@ function drawBoard() {
                 }
             }
 
+            if (boardState[i + 30 * j].isWall) {
+                cellElements[i + 30 * j].style.backgroundColor = wallColor;
+            }
+
             boardElement.appendChild(cellElements[i + 30 * j]);
         }
     }
 }
 
 initElements();
+drawBoard();
 drawSnake();
