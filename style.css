@@ -25,15 +25,23 @@ h1 {
 
 }
 
-.cell-blue {
-    width: 25px;
-    height: 25px;
-    background-color: rgb(37, 100, 226);
-
+#current-score {
+    color: greenyellow
 }
 
-.cell-dark-blue {
+.cell {
     width: 25px;
     height: 25px;
-    background-color: rgb(2, 32, 113);
+}
+
+@media (max-height: 850px) {
+    .cell {
+        width: 20px;
+        height: 20px;
+    }
+
+    #board {
+        width: 600px;
+        height: 600px;
+    }
 }

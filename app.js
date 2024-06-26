@@ -4,21 +4,22 @@ const foodColor = "#ff7e67";
 const backColor = "#306969";
 
 
-const timeInterval = 100;
+const timeInterval = 150;
 
 const boardElement = document.querySelector("#board");
+const scoreBoard = document.querySelector('#current-score')
 
 let cellElements = [];
 let boardState = [];
 let snake = [];
 
-let currentDirection = "right";
+let currentScore = 0;
 
-let gameOver = false;
+let currentDirection = "right";
 let paused = true;
 
 window.setInterval(() => {
-    if (paused === false || gameOver === true) {
+    if (paused === false) {
         updateSnake();
         drawBoard();
         drawSnake();
@@ -40,6 +41,11 @@ document.addEventListener("keydown", (event) => {
 });
 
 function updateSnake() {
+
+    currentScore = (snake.length - 3) * 10; 
+    let msg = `Current Score: ${currentScore}`
+    scoreBoard.textContent = msg; 
+
     newSegment = { x: snake[0].x, y: snake[0].y, direction: currentDirection };
     if (snake[0].direction === "right") {
         newSegment.x += 1;
@@ -57,6 +63,7 @@ function updateSnake() {
         snake.pop();
     } else {
         boardState[newSegment.x + 30 * newSegment.y].isFood = false;
+
         generateFood();
     }
 
@@ -69,9 +76,15 @@ function updateSnake() {
     }
 
     if (boardState[snake[0].x + 30 * snake[0].y].isWall) {
+        msg = `You scored ${currentScore} points!`;
+        scoreBoard.textContent = msg; 
+
         reset();
         paused = true;
     } else if (boardState[newSegment.x + 30 * newSegment.y].isSnake) {
+        msg = `You scored ${currentScore} points!`;
+        scoreBoard.textContent = msg; 
+
         paused = true;
         reset();
     }
@@ -89,6 +102,8 @@ function reset() {
     snake.push({ x: 14, y: 15, direction: "right" });
     snake.push({ x: 13, y: 15, direction: "right" });
 
+    currentScore = 0;
+
     for (let i = 0; i < 900; i++) {
         boardState[i].isSnake = false;
     }
@@ -99,7 +114,7 @@ function initElements() {
         boardState.push({ isSnake: false, isFood: false, isWall: false });
         cellElements[i] = document.createElement("div");
 
-        cellElements[i].classList.add("cell-blue");
+        cellElements[i].classList.add("cell");
         boardElement.appendChild(cellElements[i]);
     }
 
